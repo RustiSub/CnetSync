@@ -14,75 +14,75 @@ namespace CnetSync\Persister;
  */
 class Persister implements PersisterInterface
 {
-	/**
-	 * @var \CultureFeed_Cdb_Item_Event
-	 */
-	protected $cnetEvent;
+    /**
+     * @var \CultureFeed_Cdb_Item_Event
+     */
+    protected $cnetEvent;
 
-	/**
-	 * @var array
-	 */
-	protected $data = array();
+    /**
+     * @var array
+     */
+    protected $data = array();
 
-	/**
-	 * @param \CultureFeed_Cdb_Item_Event $event
-	 */
-	public function persist(\CultureFeed_Cdb_Item_Event $event)
-	{
-		$this->prepare($event);
-		$this->persistLocation($event->getLocation());
-		$this->persistContactInfo($event->getContactInfo());
-		$this->persistCalendar($event->getCalendar());
-		$this->persistDetails($event->getDetails());
-		$this->finalize();
-	}
+    /**
+     * @param \CultureFeed_Cdb_Item_Event $event
+     */
+    public function persist(\CultureFeed_Cdb_Item_Event $event)
+    {
+        $this->prepare($event);
+        $this->persistLocation($event->getLocation());
+        $this->persistContactInfo($event->getContactInfo());
+        $this->persistCalendar($event->getCalendar());
+        $this->persistDetails($event->getDetails());
+        $this->finalize();
+    }
 
-	/**
-	 *
-	 */
-	protected function prepare(\CultureFeed_Cdb_Item_Event $event)
-	{
-		$this->data = array();
-		$this->cnetEvent = $event;
-	}
+    /**
+     *
+     */
+    protected function prepare(\CultureFeed_Cdb_Item_Event $event)
+    {
+        $this->data = array();
+        $this->cnetEvent = $event;
+    }
 
-	/**
-	 * @param \CultureFeed_Cdb_Data_Location $location
-	 */
-	protected function persistLocation(\CultureFeed_Cdb_Data_Location $location)
-	{
+    /**
+     * @param \CultureFeed_Cdb_Data_Location $location
+     */
+    protected function persistLocation(\CultureFeed_Cdb_Data_Location $location)
+    {
 
-	}
+    }
 
-	/**
-	 * @param \CultureFeed_Cdb_Data_ContactInfo $contactInfo
-	 */
-	protected function persistContactInfo(\CultureFeed_Cdb_Data_ContactInfo $contactInfo)
-	{
+    /**
+     * @param \CultureFeed_Cdb_Data_ContactInfo $contactInfo
+     */
+    protected function persistContactInfo(\CultureFeed_Cdb_Data_ContactInfo $contactInfo)
+    {
 
-	}
+    }
 
-	/**
-	 * @param \CultureFeed_Cdb_Data_Calendar $calendar
-	 */
-	protected function persistCalendar(\CultureFeed_Cdb_Data_Calendar $calendar)
-	{
+    /**
+     * @param \CultureFeed_Cdb_Data_Calendar $calendar
+     */
+    protected function persistCalendar(\CultureFeed_Cdb_Data_Calendar $calendar)
+    {
 
-	}
+    }
 
-	/**
-	 * @param \CultureFeed_Cdb_Data_DetailList $details
-	 */
-	protected function persistDetails(\CultureFeed_Cdb_Data_DetailList $details)
-	{
+    /**
+     * @param \CultureFeed_Cdb_Data_DetailList $details
+     */
+    protected function persistDetails(\CultureFeed_Cdb_Data_DetailList $details)
+    {
 
-	}
+    }
 
-	/**
-	 *
-	 */
-	protected function finalize()
-	{
+    /**
+     *
+     */
+    protected function finalize()
+    {
 
-	}
+    }
 }

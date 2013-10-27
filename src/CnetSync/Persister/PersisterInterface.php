@@ -14,5 +14,5 @@ namespace CnetSync\Persister;
  */
 interface PersisterInterface
 {
-	public function persist(\CultureFeed_Cdb_Item_Event $object);
+    public function persist(\CultureFeed_Cdb_Item_Event $object);
 }

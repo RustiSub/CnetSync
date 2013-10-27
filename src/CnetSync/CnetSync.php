@@ -18,49 +18,49 @@ use CnetSync\Query\Query;
  */
 class CnetSync
 {
-	/**
-	 * @var Configuration
-	 */
-	protected $config;
+    /**
+     * @var Configuration
+     */
+    protected $config;
 
-	/**
-	 * @var Query
-	 */
-	protected $query;
+    /**
+     * @var Query
+     */
+    protected $query;
 
-	/**
-	 * @var PersisterInterface
-	 */
-	protected $persister;
+    /**
+     * @var PersisterInterface
+     */
+    protected $persister;
 
-	/**
-	 * @param Configuration $config
-	 */
-	public function __construct(Configuration $config)
-	{
-		$this->config = $config;
-		$this->query = new Query($config);
-	}
+    /**
+     * @param Configuration $config
+     */
+    public function __construct(Configuration $config)
+    {
+        $this->config = $config;
+        $this->query = new Query($config);
+    }
 
-	/**
-	 * @param PersisterInterface $persister
-	 */
-	public function setPersister(PersisterInterface $persister)
-	{
-		$this->persister = $persister;
-	}
+    /**
+     * @param PersisterInterface $persister
+     */
+    public function setPersister(PersisterInterface $persister)
+    {
+        $this->persister = $persister;
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function run()
-	{
-		foreach ($this->query as $event) {
-			if (is_object($event)) {
-				$this->persister->persist($event);
-			}
-		}
+    /**
+     * @return bool
+     */
+    public function run()
+    {
+        foreach ($this->query as $event) {
+            if (is_object($event)) {
+                $this->persister->persist($event);
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

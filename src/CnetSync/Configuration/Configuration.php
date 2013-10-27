@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */ 
+ */
 namespace CnetSync\Configuration;
 
 /**
@@ -14,50 +14,50 @@ namespace CnetSync\Configuration;
  */
 class Configuration
 {
-	/**
-	 * @var string
-	 */
-	protected $apiUrl = 'http://build.uitdatabank.be/api';
+    /**
+     * @var string
+     */
+    protected $apiUrl = 'http://build.uitdatabank.be/api';
 
-	/**
-	 * @var string
-	 */
-	protected $collectionType = 'events';
+    /**
+     * @var string
+     */
+    protected $collectionType = 'events';
 
-	/**
-	 * @var string
-	 */
-	protected $method = 'xmlview';
+    /**
+     * @var string
+     */
+    protected $method = 'xmlview';
 
-	/**
-	 * @var string
-	 */
-	protected $apiKey;
+    /**
+     * @var string
+     */
+    protected $apiKey;
 
-	/**
-	 * @var array
-	 */
-	protected $params = array();
+    /**
+     * @var array
+     */
+    protected $params = array();
 
-	/**
-	 * @param int $page
-	 * @return string
-	 */
-	public function buildApiUrl($page)
-	{
-		$params = $this->params;
+    /**
+     * @param  int    $page
+     * @return string
+     */
+    public function buildApiUrl($page)
+    {
+        $params = $this->params;
 
-		$params['page'] = $page;
-		$params['key'] = $this->apiKey;
+        $params['page'] = $page;
+        $params['key'] = $this->apiKey;
 
-		return $this->apiUrl .'/' . $this->collectionType . '/' . $this->method . '?' . http_build_query($params);
-	}
+        return $this->apiUrl .'/' . $this->collectionType . '/' . $this->method . '?' . http_build_query($params);
+    }
 
-	/**
-	 * @param string $apiKey
-	 */
-	public function setApiKey($apiKey)
-	{
-		$this->apiKey = $apiKey;
-	}
+    /**
+     * @param string $apiKey
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
 }
