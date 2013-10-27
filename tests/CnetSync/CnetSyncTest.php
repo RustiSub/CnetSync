@@ -20,6 +20,7 @@ class CnetSyncTest extends \PHPUnit_Framework_TestCase
 	{
 		$config = new \CnetSync\Configuration\Configuration();
 		$config->setApiKey('FCA9D466-7F85-43F2-872B-2EF78F3D6889');
+		$config->setParam('regio', 'Leuven');
 		$sync = new \CnetSync\CnetSync($config);
 		$sync->setPersister(new MockPersister());
 
