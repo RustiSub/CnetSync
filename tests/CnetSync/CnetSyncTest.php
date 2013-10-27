@@ -9,6 +9,8 @@
  */
 namespace CnetSync;
 
+use CnetSync\Mock\MockPersister;
+
 /**
  * @author Dries De Peuter <dries@nousefreak.be>
  */
@@ -19,7 +21,7 @@ class CnetSyncTest extends \PHPUnit_Framework_TestCase
 		$config = new \CnetSync\Configuration\Configuration();
 		$config->setApiKey('FCA9D466-7F85-43F2-872B-2EF78F3D6889');
 		$sync = new \CnetSync\CnetSync($config);
-		$sync->setPersister(new \CnetSync\Persister\Persister());
+		$sync->setPersister(new MockPersister());
 
 		$this->assertTrue($sync->run());
 	}

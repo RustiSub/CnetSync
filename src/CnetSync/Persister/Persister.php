@@ -12,7 +12,7 @@ namespace CnetSync\Persister;
 /**
  * @author Dries De Peuter <dries@nousefreak.be>
  */
-class Persister implements PersisterInterface
+abstract class Persister implements PersisterInterface
 {
     /**
      * @var \CultureFeed_Cdb_Item_Event
