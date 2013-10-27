@@ -60,4 +60,13 @@ class Configuration
     {
         $this->apiKey = $apiKey;
     }
+
+	/**
+	 * @param string $name
+	 * @param string $value
+	 */
+	public function setParam($name, $value)
+	{
+		$this->params[$name] = $value;
+	}
 }
