@@ -1,17 +1,11 @@
 {
     "name": "nousefreak/cnetsync",
     "require": {
-        "cultuurnet/cdb": "dev-2.x-parse_xmlview"
+        "cultuurnet/cdb": "2.*@dev"
     },
     "autoload": {
         "psr-0": {
             "CnetSync": "src"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/NoUseFreak/Cdb"
-        }
-    ]
+    }
 }
