@@ -1,7 +1,7 @@
 {
     "name": "nousefreak/cnetsync",
     "require": {
-        "cultuurnet/cdb": "2.*@dev"
+        "cultuurnet/cdb": "dev-master#659939bdfedf5749cda6e4b6945993110c8a6822"
     },
     "autoload": {
         "psr-0": {
