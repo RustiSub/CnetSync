@@ -5,6 +5,21 @@ CnetSync
 
 CnetSync is a library that should help you sync events from the cultuurnet database.
 
+## Installation
+
+As a temporary fix, you will need to tell composer what version of cdb it should use. This will be fixed once cultuurnet tags the version.
+
+composer.json
+
+```
+{
+    "require": {
+        "nousefreak/cnetsync": "1.0.*",
+        "cultuurnet/cdb": "dev-master"
+    }
+}
+```
+
 ## Usage
 ```php
 <?php
