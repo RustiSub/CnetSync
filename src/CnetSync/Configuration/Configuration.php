@@ -17,22 +17,17 @@ class Configuration
     /**
      * @var string
      */
-    protected $apiUrl = 'http://build.uitdatabank.be/api';
+    protected $apiUrl = 'https://acc.uitid.be/uitid/rest/searchv2/search';
 
     /**
      * @var string
      */
-    protected $collectionType = 'events';
+    protected $consumerKey;
 
     /**
      * @var string
      */
-    protected $method = 'xmlview';
-
-    /**
-     * @var string
-     */
-    protected $apiKey;
+    protected $consumerSecret;
 
     /**
      * @var array
@@ -40,33 +35,60 @@ class Configuration
     protected $params = array();
 
     /**
-     * @param  int    $page
-     * @return string
+     * Configuration constructor.
+     * @param string $consumerKey
+     * @param string $consumerSecret
      */
-    public function buildApiUrl($page)
+    public function __construct($consumerKey, $consumerSecret)
     {
-        $params = $this->params;
-
-        $params['page'] = $page;
-        $params['key'] = $this->apiKey;
-
-        return $this->apiUrl .'/' . $this->collectionType . '/' . $this->method . '?' . http_build_query($params);
+        $this->consumerKey = $consumerKey;
+        $this->consumerSecret = $consumerSecret;
     }
 
     /**
-     * @param string $apiKey
+     * @param string $name
+     * @param string $value
      */
-    public function setApiKey($apiKey)
+    public function setParam($name, $value)
     {
-        $this->apiKey = $apiKey;
+        $this->params[$name] = $value;
     }
 
-	/**
-	 * @param string $name
-	 * @param string $value
-	 */
-	public function setParam($name, $value)
-	{
-		$this->params[$name] = $value;
-	}
+    /**
+     * @param $name
+     * @param bool|false $default
+     * @return bool
+     */
+    public function getParam($name, $default = false)
+    {
+        if (isset($this->params[$name])) {
+            return $this->params[$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsumerKey()
+    {
+        return $this->consumerKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConsumerSecret()
+    {
+        return $this->consumerSecret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        return $this->apiUrl;
+    }
 }

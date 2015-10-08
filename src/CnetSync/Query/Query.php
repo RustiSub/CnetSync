@@ -10,6 +10,9 @@
 namespace CnetSync\Query;
 
 use CnetSync\Configuration\Configuration;
+use Guzzle\Http\Client;
+use Guzzle\Http\Exception\ClientErrorResponseException;
+use Guzzle\Plugin\Oauth\OauthPlugin;
 
 /**
  * @author Dries De Peuter <dries@nousefreak.be>
@@ -38,23 +41,55 @@ class Query implements \Iterator
     {
         $this->config = $config;
         $this->page = 0;
+        $this->pageSize = 100;
     }
 
     /**
-     * Load the items
-     *
      * @return bool
+     * @throws ClientErrorResponseException
+     * @throws \Exception
      */
     protected function loadItems()
     {
         try {
-            //TODO use guzzle
-            $xml = simplexml_load_file($this->buildUrl());
+            $client = new Client($this->config->getApiUrl(), array(
+                'curl.options' => array(
+                    CURLOPT_CONNECTTIMEOUT => 5,
+                )
+            ));
+
+            $oauth = new OauthPlugin(array(
+                'consumer_key'    => $this->config->getConsumerKey(),
+                'consumer_secret' => $this->config->getConsumerSecret(),
+            ));
+            $client->addSubscriber($oauth);
+
+            $request = $client->get('');
+            $request->getQuery()->set('q', $this->config->getParam('q', '*.*'));//'cdbid:406b48c4-754c-4c77-98ef-80a91a6785b1'));
+            $request->getQuery()->set('fq', $this->config->getParam('fq', 'type:event'));
+            $request->getQuery()->set('sort', 'title_sort+asc');
+            $request->getQuery()->set('start', $this->config->getParam('start', $this->page));
+            $request->getQuery()->set('rows', $this->config->getParam('rows', $this->pageSize));
+
+            $namespace = $this->config->getParam('namespace', 'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL');
+
+            try {
+                $response = $request->send();
+                $responseBody = $response->getBody(true);
+                $xml = simplexml_load_string($responseBody, 'SimpleXMLElement', 0, $namespace);
+            }
+            catch (ClientErrorResponseException $e) {
+                throw $e;
+            }
 
             $this->result = \CultureFeed_Cdb_List_Results::parseFromCdbXml($xml);
+            $xml->registerXPathNamespace('cdb', $namespace);
+            $this->result->setTotalResultsFound((int) count($xml->xpath('/cdb:cdbxml/cdb:event')));
         } catch (\Exception $e) {
-
+            throw $e;
         }
+
+        $this->page += $this->pageSize;
 
         return (bool) $this->result->getTotalResultsfound();
     }
