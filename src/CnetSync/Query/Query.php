@@ -42,6 +42,7 @@ class Query implements \Iterator
         $this->config = $config;
         $this->page = 0;
         $this->pageSize = 100;
+        $this->maxResults = 200;
     }
 
     /**
@@ -51,6 +52,10 @@ class Query implements \Iterator
      */
     protected function loadItems()
     {
+        if ($this->page >= $this->config->getParam('maxResults', $this->maxResults)) {
+            return false;
+        }
+
         try {
             $client = new Client($this->config->getApiUrl(), array(
                 'curl.options' => array(
@@ -65,11 +70,17 @@ class Query implements \Iterator
             $client->addSubscriber($oauth);
 
             $request = $client->get('');
-            $request->getQuery()->set('q', $this->config->getParam('q', '*.*'));//'cdbid:406b48c4-754c-4c77-98ef-80a91a6785b1'));
+
+            $request->getQuery()->set('q', $this->config->getParam('q', '*.*'));
             $request->getQuery()->set('fq', $this->config->getParam('fq', 'type:event'));
-            $request->getQuery()->set('sort', 'title_sort+asc');
             $request->getQuery()->set('start', $this->config->getParam('start', $this->page));
             $request->getQuery()->set('rows', $this->config->getParam('rows', $this->pageSize));
+            $request->getQuery()->set('group', $this->config->getParam('group', 'event'));
+
+            //TODO: sort causes a 401 Unauthorized
+            //            $request->getQuery()->set('sort', 'score+desc');
+
+            $request->getQuery()->useUrlEncoding(false);
 
             $namespace = $this->config->getParam('namespace', 'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL');
 
