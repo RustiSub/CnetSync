@@ -41,8 +41,8 @@ class Query implements \Iterator
     {
         $this->config = $config;
         $this->page = 0;
-        $this->pageSize = 100;
-        $this->maxResults = 200;
+        $this->pageSize = 1000;
+        $this->maxResults = 10000;
     }
 
     /**
@@ -52,7 +52,10 @@ class Query implements \Iterator
      */
     protected function loadItems()
     {
-        if ($this->page >= $this->config->getParam('maxResults', $this->maxResults)) {
+        $this->maxResults = $this->config->getParam('maxResults', $this->maxResults);
+        $this->pageSize = $this->config->getParam('rows', $this->pageSize);
+
+        if ($this->page >= $this->maxResults) {
             return false;
         }
 
@@ -74,11 +77,11 @@ class Query implements \Iterator
             $request->getQuery()->set('q', $this->config->getParam('q', '*.*'));
             $request->getQuery()->set('fq', $this->config->getParam('fq', 'type:event'));
             $request->getQuery()->set('start', $this->config->getParam('start', $this->page));
-            $request->getQuery()->set('rows', $this->config->getParam('rows', $this->pageSize));
+            $request->getQuery()->set('rows', $this->pageSize);
             $request->getQuery()->set('group', $this->config->getParam('group', 'event'));
 
             //TODO: sort causes a 401 Unauthorized
-            //            $request->getQuery()->set('sort', 'score+desc');
+            //$request->getQuery()->set('sort', 'score+desc');
 
             $request->getQuery()->useUrlEncoding(false);
 
