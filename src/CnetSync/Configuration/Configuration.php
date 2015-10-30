@@ -22,6 +22,11 @@ class Configuration
     /**
      * @var string
      */
+    protected $nameSpace = 'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL';
+
+    /**
+     * @var string
+     */
     protected $consumerKey;
 
     /**
@@ -90,5 +95,13 @@ class Configuration
     public function getApiUrl()
     {
         return $this->apiUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameSpace()
+    {
+        return $this->nameSpace;
     }
 }

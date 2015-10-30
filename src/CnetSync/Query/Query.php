@@ -9,10 +9,10 @@
  */
 namespace CnetSync\Query;
 
+use CnetSync\Adapter\CnetAdapterInterface;
 use CnetSync\Configuration\Configuration;
-use Guzzle\Http\Client;
+use CnetSync\Adapter\Service;
 use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Plugin\Oauth\OauthPlugin;
 
 /**
  * @author Dries De Peuter <dries@nousefreak.be>
@@ -35,14 +35,22 @@ class Query implements \Iterator
     protected $page;
 
     /**
-     * @param Configuration $config
+     * @var CnetAdapterInterface
      */
-    public function __construct(Configuration $config)
+    private $cnetAdapter;
+
+    /**
+     * @param Configuration $config
+     * @param CnetAdapterInterface $cnetAdapter
+     */
+    public function __construct(Configuration $config, CnetAdapterInterface $cnetAdapter)
     {
         $this->config = $config;
         $this->page = 0;
         $this->pageSize = 1000;
         $this->maxResults = 10000;
+
+        $this->cnetAdapter = $cnetAdapter;
     }
 
     /**
@@ -60,45 +68,7 @@ class Query implements \Iterator
         }
 
         try {
-            $client = new Client($this->config->getApiUrl(), array(
-                'curl.options' => array(
-                    CURLOPT_CONNECTTIMEOUT => 5,
-                )
-            ));
-
-            $oauth = new OauthPlugin(array(
-                'consumer_key'    => $this->config->getConsumerKey(),
-                'consumer_secret' => $this->config->getConsumerSecret(),
-            ));
-            $client->addSubscriber($oauth);
-
-            $request = $client->get('');
-
-            $request->getQuery()->set('q', $this->config->getParam('q', '*.*'));
-            $request->getQuery()->set('fq', $this->config->getParam('fq', 'type:event'));
-            $request->getQuery()->set('start', $this->config->getParam('start', $this->page));
-            $request->getQuery()->set('rows', $this->pageSize);
-            $request->getQuery()->set('group', $this->config->getParam('group', 'event'));
-
-            //TODO: sort causes a 401 Unauthorized
-            //$request->getQuery()->set('sort', 'score+desc');
-
-            $request->getQuery()->useUrlEncoding(false);
-
-            $namespace = $this->config->getParam('namespace', 'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL');
-
-            try {
-                $response = $request->send();
-                $responseBody = $response->getBody(true);
-                $xml = simplexml_load_string($responseBody, 'SimpleXMLElement', 0, $namespace);
-            }
-            catch (ClientErrorResponseException $e) {
-                throw $e;
-            }
-
-            $this->result = \CultureFeed_Cdb_List_Results::parseFromCdbXml($xml);
-            $xml->registerXPathNamespace('cdb', $namespace);
-            $this->result->setTotalResultsFound((int) count($xml->xpath('/cdb:cdbxml/cdb:event')));
+            $this->result = $this->cnetAdapter->getEventList($this->page, $this->pageSize);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -106,20 +76,6 @@ class Query implements \Iterator
         $this->page += $this->pageSize;
 
         return (bool) $this->result->getTotalResultsfound();
-    }
-
-    /**
-     * Build the api call url
-     * NOTE: Calling this method will increase the page by one every call.
-     *
-     * @return string
-     */
-    public function buildUrl()
-    {
-        $page = $this->page;
-        $this->page++;
-
-        return $this->config->buildApiUrl($page);
     }
 
     /**

@@ -9,6 +9,7 @@
  */
 namespace CnetSync;
 
+use CnetSync\Adapter\CnetAdapterInterface;
 use CnetSync\Configuration\Configuration;
 use CnetSync\Persister\PersisterInterface;
 use CnetSync\Query\Query;
@@ -35,11 +36,12 @@ class CnetSync
 
     /**
      * @param Configuration $config
+     * @param CnetAdapterInterface $cnetAdapter
      */
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $config, CnetAdapterInterface $cnetAdapter)
     {
         $this->config = $config;
-        $this->query = new Query($config);
+        $this->query = new Query($config, $cnetAdapter);
     }
 
     /**
