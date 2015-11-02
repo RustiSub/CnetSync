@@ -11,7 +11,6 @@ namespace CnetSync\Query;
 
 use CnetSync\Adapter\CnetAdapterInterface;
 use CnetSync\Configuration\Configuration;
-use CnetSync\Adapter\Service;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 /**
@@ -47,8 +46,8 @@ class Query implements \Iterator
     {
         $this->config = $config;
         $this->page = 0;
-        $this->pageSize = 1000;
-        $this->maxResults = 10000;
+        $this->pageSize = 100;
+        $this->maxResults = 1000;
 
         $this->cnetAdapter = $cnetAdapter;
     }
@@ -61,7 +60,7 @@ class Query implements \Iterator
     protected function loadItems()
     {
         $this->maxResults = $this->config->getParam('maxResults', $this->maxResults);
-        $this->pageSize = $this->config->getParam('rows', $this->pageSize);
+        $this->pageSize = $this->config->getParam('pageSize', $this->pageSize);
 
         if ($this->page >= $this->maxResults) {
             return false;
@@ -73,7 +72,9 @@ class Query implements \Iterator
             throw $e;
         }
 
-        $this->page += $this->pageSize;
+        $this->page += $this->result->getTotalResultsfound();
+
+        $this->result->rewind();
 
         return (bool) $this->result->getTotalResultsfound();
     }

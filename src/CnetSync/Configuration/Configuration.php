@@ -17,12 +17,12 @@ class Configuration
     /**
      * @var string
      */
-    protected $apiUrl = 'https://acc.uitid.be/uitid/rest/searchv2/search';
+    protected $apiUrl;
 
     /**
      * @var string
      */
-    protected $nameSpace = 'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL';
+    protected $nameSpace;
 
     /**
      * @var string
@@ -41,11 +41,15 @@ class Configuration
 
     /**
      * Configuration constructor.
+     * @param string $apiUrl
+     * @param string $nameSpace
      * @param string $consumerKey
      * @param string $consumerSecret
      */
-    public function __construct($consumerKey, $consumerSecret)
+    public function __construct($apiUrl, $nameSpace, $consumerKey, $consumerSecret)
     {
+        $this->apiUrl = $apiUrl;
+        $this->nameSpace = $nameSpace;
         $this->consumerKey = $consumerKey;
         $this->consumerSecret = $consumerSecret;
     }
