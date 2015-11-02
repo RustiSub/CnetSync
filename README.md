@@ -3,8 +3,6 @@ CnetSync
 
 [![Build Status](https://secure.travis-ci.org/NoUseFreak/CnetSync.png)](https://travis-ci.org/NoUseFreak/CnetSync)
 
-Fork for testing purposes.
-
 CnetSync is a library that should help you sync events from the cultuurnet database.
 
 ## Installation
