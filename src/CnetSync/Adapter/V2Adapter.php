@@ -10,7 +10,6 @@
 namespace CnetSync\Adapter;
 
 use CnetSync\Configuration\Configuration;
-use EgoCore\Error\Exception;
 use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Plugin\Oauth\OauthPlugin;
@@ -70,11 +69,11 @@ class V2Adapter implements CnetAdapterInterface
             $response = $request->send();
             $responseBody = $response->getBody(true);
             $xml = simplexml_load_string($responseBody, 'SimpleXMLElement', 0, $this->config->getNameSpace());
+            $xml->registerXPathNamespace('cdb', $this->config->getNameSpace());
 
             $result = \CultureFeed_Cdb_List_Results::parseFromCdbXml($xml);
             $result = $this->completeEventList($result);
 
-            $xml->registerXPathNamespace('cdb', $this->config->getNameSpace());
             $result->setTotalResultsFound((int) count($xml->xpath('/cdb:cdbxml/cdb:event')));
         }
         catch (ClientErrorResponseException $e) {
@@ -166,12 +165,6 @@ class V2Adapter implements CnetAdapterInterface
     {
         /** @var \CultureFeed_Cdb_Item_Event $item */
         foreach ($list as $item) {
-//            var_dump($item->getCdbId());
-//            /** @var \CultureFeed_Cdb_Data_Detail $detail */
-//            foreach ($item->getDetails() as $detail) {
-//                var_dump($detail->getTitle());
-//            }
-
             $this->completeActor($item->getLocation());
             $this->completeActor($item->getOrganiser());
         }
