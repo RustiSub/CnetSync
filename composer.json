@@ -1,18 +1,11 @@
 {
     "name": "nousefreak/cnetsync",
     "require": {
-        "cultuurnet/cdb": "dev-master"
+        "cultuurnet/cdb": "2.*"
     },
     "autoload": {
         "psr-0": {
             "CnetSync": "src"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/RustiSub/Cdb"
-        }
-    ],
-    "minimum-stability": "dev"
+    }
 }
