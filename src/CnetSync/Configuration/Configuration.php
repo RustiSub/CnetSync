@@ -108,4 +108,36 @@ class Configuration
     {
         return $this->nameSpace;
     }
+
+    /**
+     * @param string $apiUrl
+     */
+    public function setApiUrl($apiUrl)
+    {
+        $this->apiUrl = $apiUrl;
+    }
+
+    /**
+     * @param string $nameSpace
+     */
+    public function setNameSpace($nameSpace)
+    {
+        $this->nameSpace = $nameSpace;
+    }
+
+    /**
+     * @param string $consumerKey
+     */
+    public function setConsumerKey($consumerKey)
+    {
+        $this->consumerKey = $consumerKey;
+    }
+
+    /**
+     * @param string $consumerSecret
+     */
+    public function setConsumerSecret($consumerSecret)
+    {
+        $this->consumerSecret = $consumerSecret;
+    }
 }
